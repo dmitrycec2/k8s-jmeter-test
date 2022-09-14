@@ -51,13 +51,13 @@ remote_hosts=""
 
 for ((i=0; i<${slavenum}; i++))
 do
-echo "1"
+echo "1"${profile}
     #echo "Copying scenario/${test_name} to ${slavearray[$i]}"
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}"
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/scripts"
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles"
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles/${profile}"
-echo "2"
+echo "2"${profile}
 kubectl cp "$jmx" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/scripts/$test_name.jmx
 kubectl cp "profile_run.sh" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/profile_run.sh
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/profile_run.sh"
