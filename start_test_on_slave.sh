@@ -57,15 +57,17 @@ kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jm
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/scripts"
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles"
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles/${profile}"
-
+echo "2"
 kubectl cp "$jmx" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/scripts/$test_name.jmx
 kubectl cp "profile_run.sh" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/profile_run.sh
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/profile_run.sh"
 kubectl cp "jmeter-start-test.sh" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/jmeter-start-test.sh
 kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/jmeter-start-test.sh"
 kubectl cp "jmeter_parser_ALL.jar" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/jmeter_parser_ALL.jar
+echo "3"
 kubectl cp "profiles/${profile}/scripts_params.xlsx" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/profiles/${profile}/scripts_params.xlsx
-
+echo "4" ${profile}
+pwd
 remote_hosts=$remote_hosts${slavearray[i]}".jmeter:1099"
 if [[ i -ne ${slavenum}-1 ]];
 	then
