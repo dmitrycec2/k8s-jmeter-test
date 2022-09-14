@@ -5,7 +5,7 @@ def prepareStages(String name) {
 	  stage ("task_1"){    
 		node("${name}") {
 			dir("${env.custom_var}"){
-				if(P_UC01.toString()=="${name}"){
+				if(P_UC022.toString()=="${name}"){
 					sh 'echo -----------------1'
 					//sh './test.sh UC01_run'
 					sh './start_test_on_slave.sh scripts/UC022.jmx jmeter-0'
