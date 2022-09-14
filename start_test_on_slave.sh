@@ -34,7 +34,7 @@ echo "product_name ${product_name}"
 IFS="," read -a slavearray <<< $2
 echo "My array: ${slavearray[@]}"
 echo "Number of elements in the array: ${#slavearray[@]}"
-jmeter=$(eval "kubectl exec -n alrosa --stdin --tty jmeter-0 -- bash -c "pwd| awk -F'/' '{print $3}'"")
+jmeter=$(eval "kubectl exec -n alrosa --stdin jmeter-0 -- bash -c "pwd| awk -F'/' '{print $3}'"")
 echo "jmeter "$jmeter
 
 # for array iteration
@@ -53,16 +53,16 @@ for ((i=0; i<${slavenum}; i++))
 do
 echo "1"
     #echo "Copying scenario/${test_name} to ${slavearray[$i]}"
-kubectl exec -n $tenant --stdin --tty "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}"
-kubectl exec -n $tenant --stdin --tty "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/scripts"
-kubectl exec -n $tenant --stdin --tty "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles"
-kubectl exec -n $tenant --stdin --tty "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles/${profile}"
+kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}"
+kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/scripts"
+kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles"
+kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "mkdir -p /opt/$jmeter/bin/${product_name}/profiles/${profile}"
 
 kubectl cp "$jmx" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/scripts/$test_name.jmx
 kubectl cp "profile_run.sh" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/profile_run.sh
-kubectl exec -n $tenant --stdin --tty "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/profile_run.sh"
+kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/profile_run.sh"
 kubectl cp "jmeter-start-test.sh" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/jmeter-start-test.sh
-kubectl exec -n $tenant --stdin --tty "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/jmeter-start-test.sh"
+kubectl exec -n $tenant --stdin "${slavearray[i]}" -- bash -c "chmod 777 /opt/$jmeter/bin/${product_name}/jmeter-start-test.sh"
 kubectl cp "jmeter_parser_ALL.jar" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/jmeter_parser_ALL.jar
 kubectl cp "profiles/${profile}/scripts_params.xlsx" -n $tenant "${slavearray[i]}":/opt/$jmeter/bin/${product_name}/profiles/${profile}/scripts_params.xlsx
 
